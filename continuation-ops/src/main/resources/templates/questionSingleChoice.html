@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html layout:decorator="/layout" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head th:include="layout :: htmlhead" th:with="title='试题信息管理'"></head>
+<body>
+<nav th:replace="layout :: nav_bar"></nav>
+<div layout:fragment="content" class="wrap">
+    <header th:include="layout :: page-header"></header>
+    <div class="content container">
+        <h2 class="page-title">试题信息管理</h2>
+        <section class="widget">
+            <form class="form-horizontal" role="form">
+                <div class="form-group row">
+                    <div class="col-sm-2">
+                        <div class="columns btn-group">
+                            <button class="btn btn-success" type="button" id="insertButton" aria-label="添加" title="添加">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <label class="col-sm-1 control-label text-left" for="search_level">级别：</label>
+                <div class="col-sm-2">
+                    <select id="search_level" class="select2 select-block-level"
+                            data-width="off"
+                            data-minimum-results-for-search="10"
+                            name="level">
+                        <option selected="selected" value="">-</option>
+                    </select>
+                </div>
+                <label class="col-sm-1 control-label text-left" for="search_subject">科目：</label>
+                <div class="col-sm-2">
+                    <select id="search_subject" class="select2 select-block-level"
+                            data-width="off"
+                            data-minimum-results-for-search="10"
+                            name="subject">
+                        <option selected="selected" value="">-</option>
+                    </select>
+                </div>
+                <label class="col-sm-1 control-label text-left" for="search_unit">单元：</label>
+                <div class="col-sm-2">
+                    <select id="search_unit" class="select2 select-block-level"
+                            data-width="off"
+                            data-minimum-results-for-search="10"
+                            name="unit">
+                        <option selected="selected" value="">-</option>
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <input type="submit" class="col-sm-1 btn btn-primary " value="查询" data-toggle="button"
+                           aria-pressed="false" id="searchButton" style="margin-left: 50px"/>
+                </div>
+            </form>
+            <header>
+                <h4>试题信息</h4>
+            </header>
+            <div class="body">
+                <div id="table-apply"></div>
+            </div>
+        </section>
+
+        <!-- 题目编辑信息 -->
+        <div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
+             style="display: none">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="updateModalTitle">弹出框标题</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input class="hidden" name="id" id="id"/>
+                        <form id="questionInfoForm" method="post" data-parsley-priority-enabled="false" novalidate="novalidate">
+                            <div class="form-group">
+                                <label class="control-label" for="level">级别</label>
+                                <div>
+                                    <select id="level" class="select2 select-block-level"
+                                            data-width="off"
+                                            data-minimum-results-for-search="10"
+                                            data-parsley-required="true" data-parsley-required-message="级别不可为空"
+                                            name="level">
+                                        <option selected="selected" value="">-</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="subject">科目</label>
+                                <div>
+                                    <select id="subject" class="select2 select-block-level"
+                                            data-width="off"
+                                            data-minimum-results-for-search="10"
+                                            data-parsley-required="true"
+                                            data-parsley-required-message="科目不可为空"
+                                            name="subject">
+                                        <option selected="selected" value="">-</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="unit">单元</label>
+                                <div>
+                                    <select id="unit" class="select2 select-block-level"
+                                            data-width="off"
+                                            data-minimum-results-for-search="10"
+                                            data-parsley-required="true"
+                                            data-parsley-required-message="单元不可为空"
+                                            name="unit">
+                                        <option selected="selected" value="">-</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="score">分值</label>
+                                <div>
+                                    <input type="number" name="score" id="score" placeholder="分值为整数"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="3"
+                                           data-parsley-required="true"
+                                           data-parsley-required-message="分值不可为空"
+                                           data-parsley-pattern=^[0-9]*$
+                                           data-parsley-pattern-message="必须为数字"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="answerTime">答题时间</label>
+                                <div class="input-group">
+                                    <input type="number" name="answerTime" id="answerTime"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="2"
+                                           data-parsley-required="true"
+                                           data-parsley-required-message="分值不可为空"
+                                           data-parsley-pattern=^[0-9]*$
+                                           data-parsley-pattern-message="必须为数字"
+                                           required="required"/>
+                                    <span class="input-group-addon">分钟</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">问题详情</label>
+                                <div name = "question">
+                                    <input type="text" name="title" id="title" placeholder="题目"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           data-parsley-required="true"
+                                           data-parsley-required-message="题目不可为空"
+                                           required="required"/>
+                                    <div class = "input-group-add"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="answer">答案</label>
+                                <div>
+                                    <select id="answer" class="select2 select-block-level"
+                                            data-width="off"
+                                            data-minimum-results-for-search="10"
+                                            data-parsley-required="true"
+                                            data-parsley-required-message="答案不可为空"
+                                            name="answer">
+                                        <option selected="selected" value="">-</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="answerDesc">答案明细</label>
+                                <div>
+                                    <select id="answerDesc" class="select2 select-block-level"
+                                            data-width="off"
+                                            data-minimum-results-for-search="10"
+                                            data-parsley-required="true"
+                                            data-parsley-required-message="答案明细不可为空"
+                                            name="answerDesc">
+                                        <option selected="selected" value="">-</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="commitButton">提交</button>
+                    </div>
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
+        <!--<div id="questionModel" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"-->
+             <!--style="display: none">-->
+            <!--<div class="modal-dialog">-->
+                <!--<div class="modal-content">-->
+                    <!--<div class="modal-header">-->
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>-->
+                        <!--<h4 class="modal-title" id="questionModelTitle">弹出框标题</h4>-->
+                    <!--</div>-->
+                    <!--<div class="modal-body">-->
+                        <!--<form id="questionDetailForm" method="post"-->
+                              <!--data-parsley-priority-enabled="false"-->
+                              <!--novalidate="novalidate">-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="control-label" for="title">题目</label>-->
+                                <!--<div class="input-group">-->
+                                    <!--<input type="text" name="title" id="title"-->
+                                           <!--class="form-control"-->
+                                           <!--data-parsley-trigger="change"-->
+                                           <!--data-parsley-maxlength="100"-->
+                                           <!--required="required"/>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</form>-->
+                    <!--</div>-->
+                    <!--<div class="modal-footer">-->
+                        <!--<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>-->
+                        <!--<button type="button" class="btn btn-primary" id="commitQuestionDetail">提交</button>-->
+                    <!--</div>-->
+
+                <!--</div>&lt;!&ndash; /.modal-content &ndash;&gt;-->
+            <!--</div>&lt;!&ndash; /.modal-dialog &ndash;&gt;-->
+        <!--</div>-->
+
+
+        <!-- 信息详情 -->
+        <div id="modalExt" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true"
+             style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">试题详情</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!--<div id="table-instructionExt"></div>-->
+                        <pre id="json-renderer"></pre>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+    </div>
+    <script type="application/javascript" th:src="@{/js/question_single_choice.js}"></script>
+</div>
+</body>
+</html>

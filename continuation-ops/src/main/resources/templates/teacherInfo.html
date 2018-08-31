@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html layout:decorator="/layout" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head th:include="layout :: htmlhead" th:with="title='教职工信息管理'"></head>
+<body>
+<nav th:replace="layout :: nav_bar"></nav>
+<div layout:fragment="content" class="wrap">
+    <header th:include="layout :: page-header"></header>
+    <div class="content container">
+        <h2 class="page-title">教职工信息管理</h2>
+        <section class="widget">
+            <form class="form-horizontal" role="form">
+                <div class="form-group row">
+                    <div class="col-sm-2">
+                        <div class="columns btn-group">
+                            <button class="btn btn-success" type="button" id="insertButton" aria-label="添加" title="添加">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-1 control-label text-right" for="work_number">工号</label>
+                    <div class="col-sm-3">
+                        <input type="text" id="work_number" class="form-control"/>
+                    </div>
+                </div>
+                <label class="col-sm-1 control-label text-left" for="teacherLevel">级别：</label>
+                <div class="col-sm-2">
+                    <select id="teacherLevel" class="select2 select-block-level"
+                            data-width="off"
+                            data-minimum-results-for-search="10"
+                            name="level">
+                        <option selected="selected" value="">-</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label text-left" for="isVoided">是否在职：</label>
+                <div class="col-sm-2">
+                    <select id="isVoided" class="select2 select-block-level"
+                            data-width="off"
+                            data-minimum-results-for-search="10"
+                            name="voided">
+                        <option selected="selected" value="">-</option>
+                        <option value="0">离职</option>
+                        <option value="1">在职</option>
+                    </select>
+                </div>
+                <div  class="form-group row">
+                    <input type="submit" class="col-sm-1 btn btn-primary " value="查询" data-toggle="button"
+                           aria-pressed="false" id="searchButton" style="margin-left: 50px"/>
+                </div>
+            </form>
+            <header>
+                <h4>教职工信息</h4>
+            </header>
+            <div class="body">
+                <div id="table-apply"></div>
+            </div>
+        </section>
+
+        <!-- 教师编辑信息 -->
+        <div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
+             style="display: none">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title" id="updateModalTitle">弹出框标题</h4>
+                    </div>
+                    <label for="id"></label><input class="hidden" id="id"/>
+                    <div class="modal-body">
+                        <form id="teacherInfoForm" method="post"
+                              data-parsley-priority-enabled="false"
+                              novalidate="novalidate">
+                            <div class="form-group">
+                                <label class="control-label" for="workNumber">工号</label>
+                                <div>
+                                    <input type="text" name="workNumber" id="workNumber" readonly="readonly"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="password">登录密钥</label>
+                                <div>
+                                    <input type="text" name="password" id="password" readonly="readonly"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="level">级别</label>
+                                <div>
+                                    <select id="level" class="select2 select-block-level"
+                                            data-width="off"
+                                            data-minimum-results-for-search="10"
+                                            name="level">
+                                        <option selected="selected" value="">-</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="subject">科目</label>
+                                <div>
+                                    <select id="subject" class="select2 select-block-level"
+                                            data-width="off"
+                                            data-minimum-results-for-search="10"
+                                            name="subject">
+                                        <option selected="selected" value="">-</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="name">姓名</label>
+                                <div>
+                                    <input type="text" name="name" id="name"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="identityNumber">身份证号</label>
+                                <div>
+                                    <input type="text" name="identityNumber" id="identityNumber"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="homePhone">家庭电话</label>
+                                <div>
+                                    <input type="text" name="homePhone" id="homePhone"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="telephone">手机号码</label>
+                                <div>
+                                    <input type="text" name="telephone" id="telephone"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="homeAddress">家庭住址</label>
+                                <div>
+                                    <input type="text" name="homeAddress" id="homeAddress"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="contactName">联系人姓名</label>
+                                <div>
+                                    <input type="text" name="contactName" id="contactName"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="contactTelephone">联系人手机号</label>
+                                <div>
+                                    <input type="text" name="contactTelephone" id="contactTelephone"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="contactRelationship">联系人关系</label>
+                                <div>
+                                    <input type="text" name="contactRelationship" id="contactRelationship"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox">
+                                    <input type="checkbox" id="voided" name="voided"/>
+                                    <label class="checkbox" for="voided">
+                                        是否在职
+                                    </label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" id="commitButton">提交</button>
+                    </div>
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+
+
+        <!-- 教师详情 -->
+        <div id="modalExt" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+             aria-hidden="true"
+             style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h4 class="modal-title">教职工详情</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!--<div id="table-instructionExt"></div>-->
+                        <pre id="json-renderer"></pre>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div>
+    </div>
+    <script type="application/javascript" th:src="@{/js/teacherInfo.js}"></script>
+</div>
+</body>
+</html>

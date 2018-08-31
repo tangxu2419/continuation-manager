@@ -1,0 +1,44 @@
+spring:
+  profiles:
+    active: dev
+    include: base
+
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/continuation
+      fieldNamingStrategy: org.springframework.data.mapping.model.SnakeCaseFieldNamingStrategy
+
+  datasource:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/continuation?characterEncoding=utf8&useSSL=false
+      username: root
+      password: root
+
+  jpa:
+    show-sql: false
+    properties:
+      hibernate.format_sql: true
+    hibernate.ddl-auto: none
+    database: mysql
+
+  h2:
+    console:
+      enabled: false
+
+  redis:
+    host: localhost
+    port: 6379
+
+  thymeleaf:
+    cache: false
+
+server:
+  tomcat:
+    basedir: target/tomcat
+    accesslog:
+      enabled: true
+
+continuation:
+  login-live-time: PT30M
+  questionLiveTime: P1D
+  singleChoiceTestNumber: 15

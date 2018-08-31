@@ -1,0 +1,26 @@
+
+base.conf:
+  levels:
+    - '1' # 小学一年级
+    - '2' # 小学二年级
+    - '3' # 小学三年级
+    - '4' # 小学四年级
+    - '5' # 小学五年级
+    - '6' # 小学六年级
+    - '11' # 初中一年级
+    - '12' # 初中二年级
+    - '13' # 初中三年级
+    - '21' # 高中一年级
+    - '22' # 高中二年级
+    - '23' # 高中三年级
+  subject:
+    - MATH: # 数学
+      - ARITHMETIC # 算术
+      - EQUATION # 方程式
+    - CHINESE: # 语文
+      - POETRY # 诗词
+      - SPELL # 拼音
+      - IDIOM # 成语
+    - ENGLISH: # 英语
+      - TRANSLATE # 翻译
+      - FILL_IN_BLANKS # 填空

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head th:fragment="htmlhead">
+    <title th:text="${title}">后台管理系统</title>
+    <meta charset="UTF-8"/>
+
+    <!-- common libraries. required for every page-->
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/jquery/dist/jquery.min.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/jquery-pjax/jquery.pjax.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/widgster/widgster.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/underscore/underscore.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/js/app.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/js/settings.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <!-- page specific libs -->
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/backbone/backbone.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/backbone.paginator/lib/backbone.paginator.min.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/backgrid/lib/backgrid.min.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/backgrid-paginator/backgrid-paginator.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/moment/min/moment-with-locales.min.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/bootstrap-select/dist/js/bootstrap-select.min.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/select2/select2.min.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/bootstrap-sass/assets/javascripts/bootstrap/collapse.js}"></script>
+    <script th:src="@{/imports/json-viewer/jquery.json-viewer.js}"></script>
+    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/parsleyjs/dist/parsley.min.js}"></script>
+
+
+    <link rel="stylesheet" th:href="@{/imports/json-viewer/jquery.json-viewer.css}"/>
+    <link rel="stylesheet" th:href="@{/imports/wrapbootstrap-3.7.0-dist/css/application.css}"/>
+    <link rel="stylesheet" th:href="@{css/common.css}"/>
+</head>
+
+
+<body>
+<div>
+    <div class="logo">
+        <h4><a href="/">Light <strong>LOGO</strong></a></h4>
+    </div>
+    <nav th:fragment="nav_bar" id="sidebar" class="sidebar nav-collapse collapse">
+        <div class="panel-group side-nav" id="accordion">
+            <div class="panel panel-default">
+                <li class="panel-title">
+                    <button data-toggle="collapse" class="btn btn-link" data-parent="#accordion" href="#personnelManager" aria-expanded="false">
+                        <i class="fa fa-align-left"></i> <span class="name">人员信息管理</span></button>
+                </li>
+                <div id="personnelManager" class="panel-collapse collapse" aria-expanded="false" >
+                    <div class="panel-title">
+                        <li>
+                            <a href="/teacherInfo"><span class="name">教职工信息</span></a>
+                        </li>
+                        <li>
+                            <a href="#"><span class="name">学员信息</span></a>
+                        </li>
+                    </div>
+
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <li class="panel-title">
+                    <button data-toggle="collapse" class="btn btn-link" data-parent="#accordion" href="#questionManager">
+                        <i class="fa fa-pencil"></i> <span class="name">试题信息管理</span></button>
+                </li>
+                <div id="questionManager" class="panel-collapse collapse">
+                    <div class="panel-title">
+                        <li>
+                            <a href="/questionSingleChoice"><span class="name">单项选择</span></a>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </nav>
+    <div layout:fragment="content">这是模板内容页</div>
+
+    <!--<div class="title"><h2>共债管理页面</h2></div>-->
+    <!--<div layout:fragment="content" id="content" class="content container">这是模板内容页</div>-->
+    <header class="page-header" th:fragment="page-header">
+
+    </header>
+
+</div>
+</body>
+</html>
