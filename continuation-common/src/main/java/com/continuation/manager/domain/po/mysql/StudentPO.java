@@ -1,27 +1,27 @@
 package com.continuation.manager.domain.po.mysql;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.redis.core.index.Indexed;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * @author tangxu
  * @date 2018/8/1315:27
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
+@DynamicUpdate
 @Entity
 @Table(name = "t_student_info")
 @ConditionalOnBean(DataSourceProperties.class)
 public class StudentPO extends BaseEntity {
-
 
     /**
      * 学号
@@ -55,10 +55,10 @@ public class StudentPO extends BaseEntity {
     private String sex;
 
     /**
-     * 年龄
+     * 身份证号
      */
-    @Column(length = 3)
-    private Integer age;
+    @Column(length = 20)
+    private String identityNumber;
 
     /**
      * 家庭联系电话
@@ -103,7 +103,7 @@ public class StudentPO extends BaseEntity {
     private String standbyContactRelationship;
 
     /**
-     * 联系人手机号
+     * 备用联系人手机号
      */
     @Column(length = 20)
     private String standbyContactTelephone;

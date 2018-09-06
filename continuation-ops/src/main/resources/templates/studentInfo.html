@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html layout:decorator="/layout" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.w3.org/1999/xhtml">
-<head th:include="layout :: htmlhead" th:with="title='教职工信息管理'"></head>
+<head th:include="layout :: htmlhead" th:with="title='学员信息管理'"></head>
 <body>
 <nav th:replace="layout :: nav_bar"></nav>
 <div layout:fragment="content" class="wrap">
     <header th:include="layout :: page-header"></header>
     <div class="content container">
-        <h2 class="page-title">教职工信息管理</h2>
+        <h2 class="page-title">学员信息管理</h2>
         <section class="widget">
             <form class="form-horizontal" role="form">
                 <div class="form-group row">
@@ -19,45 +19,43 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-1 control-label text-right" for="work_number">工号</label>
-                    <div class="col-sm-3">
-                        <input type="text" id="work_number" class="form-control"/>
+                    <label class="col-sm-1 control-label text-right" for="student_number">学号</label>
+                    <div class="col-sm-2">
+                        <input type="text" id="student_number" class="form-control"/>
                     </div>
-                </div>
-                <label class="col-sm-1 control-label text-left" for="teacherLevel">级别：</label>
-                <div class="col-sm-2">
-                    <select id="teacherLevel" class="select2 select-block-level"
-                            data-width="off"
-                            data-minimum-results-for-search="10"
-                            name="level">
-                        <option selected="selected" value="">-</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                </div>
-                <label class="col-sm-1 control-label text-left" for="search_subject">科目：</label>
-                <div class="col-sm-2">
-                    <select id="search_subject" class="select2 select-block-level"
-                            data-width="off"
-                            data-minimum-results-for-search="10"
-                            name="subject">
-                        <option selected="selected" value="">-</option>
-                    </select>
-                </div>
-                <div  class="form-group row">
-                    <input type="submit" class="col-sm-1 btn btn-primary " value="查询" data-toggle="button"
-                           aria-pressed="false" id="searchButton" style="margin-left: 50px"/>
+                    <label class="col-sm-1 control-label text-left" for="year">学年：</label>
+                    <div class="col-sm-2">
+                        <select id="year" class="select2 select-block-level"
+                                data-width="off"
+                                data-minimum-results-for-search="10"
+                                name="year">
+                            <option selected="selected" value="">-</option>
+                        </select>
+                    </div>
+                    <label class="col-sm-1 control-label text-left" for="search_classId">班级：</label>
+                    <div class="col-sm-3">
+                        <select id="search_classId" class="select2 select-block-level"
+                                data-width="off"
+                                data-minimum-results-for-search="10"
+                                name="classId">
+                            <option selected="selected" value="">-</option>
+                        </select>
+                    </div>
+                    <div class="form-group row">
+                        <input type="submit" class="col-sm-1 btn btn-primary " value="查询" data-toggle="button"
+                               aria-pressed="false" id="searchButton" style="margin-left: 50px"/>
+                    </div>
                 </div>
             </form>
             <header>
-                <h4>教职工信息</h4>
+                <h4>学员信息</h4>
             </header>
             <div class="body">
                 <div id="table-apply"></div>
             </div>
         </section>
 
-        <!-- 教师编辑信息 -->
+        <!-- 编辑信息 -->
         <div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"
              style="display: none">
             <div class="modal-dialog">
@@ -67,13 +65,13 @@
                         <h4 class="modal-title" id="updateModalTitle">弹出框标题</h4>
                     </div>
                     <div class="modal-body">
-                        <form id="teacherInfoForm" method="post"
+                        <form id="infoForm" method="post"
                               data-parsley-priority-enabled="false"
                               novalidate="novalidate">
                             <div class="form-group">
-                                <label class="control-label" for="workNumber">工号</label>
+                                <label class="control-label" for="studentNumber">学号</label>
                                 <div>
-                                    <input type="text" name="workNumber" id="workNumber" readonly="readonly"
+                                    <input type="text" name="studentNumber" id="studentNumber" readonly="readonly"
                                            class="form-control"
                                            data-parsley-trigger="change"
                                            data-parsley-maxlength="100"
@@ -91,23 +89,20 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label" for="level">级别</label>
+                                <label class="control-label text-left" for="year">学年：</label>
                                 <div>
-                                    <select id="level" class="select2 select-block-level"
+                                    <select class="select2 select-block-level"
                                             data-width="off"
-                                            data-minimum-results-for-search="10"
-                                            name="level">
+                                            name="year">
                                         <option selected="selected" value="">-</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" for="subject">科目</label>
+                                <label class="control-label text-left" for="classId">班级</label>
                                 <div>
-                                    <select id="subject" class="select2 select-block-level"
+                                    <select id="classId" class="select2 select-block-level"
                                             data-width="off"
                                             data-minimum-results-for-search="10"
-                                            name="subject">
+                                            name="classId">
                                         <option selected="selected" value="">-</option>
                                     </select>
                                 </div>
@@ -115,7 +110,7 @@
                             <div class="form-group">
                                 <label class="control-label" for="name">姓名</label>
                                 <div>
-                                    <input type="text" name="name" id="name"
+                                    <input type="text" name="name" id="name" readonly="readonly"
                                            class="form-control"
                                            data-parsley-trigger="change"
                                            data-parsley-maxlength="100"
@@ -133,19 +128,9 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label" for="homePhone">家庭电话</label>
+                                <label class="control-label" for="contactNumber">家庭电话</label>
                                 <div>
-                                    <input type="text" name="homePhone" id="homePhone"
-                                           class="form-control"
-                                           data-parsley-trigger="change"
-                                           data-parsley-maxlength="100"
-                                           required="required"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label" for="telephone">手机号码</label>
-                                <div>
-                                    <input type="text" name="telephone" id="telephone"
+                                    <input type="text" name="contactNumber" id="contactNumber"
                                            class="form-control"
                                            data-parsley-trigger="change"
                                            data-parsley-maxlength="100"
@@ -193,10 +178,40 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class="control-label" for="standbyContactName">备用联系人姓名</label>
+                                <div>
+                                    <input type="text" name="standbyContactName" id="standbyContactName"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="standbyContactTelephone">备用联系人手机号</label>
+                                <div>
+                                    <input type="text" name="standbyContactTelephone" id="standbyContactTelephone"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="standbyContactRelationship">备用联系人关系</label>
+                                <div>
+                                    <input type="text" name="standbyContactRelationship" id="standbyContactRelationship"
+                                           class="form-control"
+                                           data-parsley-trigger="change"
+                                           data-parsley-maxlength="100"
+                                           required="required"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="checkbox">
                                     <input type="checkbox" id="voided" name="voided"/>
                                     <label class="checkbox" for="voided">
-                                        是否在职
+                                        是否在读
                                     </label>
                                 </div>
                             </div>
@@ -212,7 +227,7 @@
         </div>
 
 
-        <!-- 教师详情 -->
+        <!-- 详情 -->
         <div id="modalExt" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
              aria-hidden="true"
              style="display: none;">
@@ -221,7 +236,7 @@
 
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title">教职工详情</h4>
+                        <h4 class="modal-title">TITLE</h4>
                     </div>
                     <div class="modal-body">
                         <!--<div id="table-instructionExt"></div>-->
@@ -234,7 +249,7 @@
             </div><!-- /.modal-dialog -->
         </div>
     </div>
-    <script type="application/javascript" th:src="@{/js/teacherInfo.js}"></script>
+    <script type="application/javascript" th:src="@{/js/studentInfo.js}"></script>
 </div>
 </body>
 </html>

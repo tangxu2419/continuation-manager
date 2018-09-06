@@ -15,11 +15,6 @@ $(function () {
         'del': "<span class=\"glyphicon glyphicon-minus\"></span>"
     });
 
-    function initSelect(element){
-        element.empty();
-        element.append($("<option>", {value: ""}).text("-"));
-    }
-
     function changeAnswer() {
         var answer = [];
         var answerDesc = [];

@@ -1,7 +1,6 @@
 package com.continuation.manager.web;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
@@ -13,22 +12,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class IndexController {
 
     @GetMapping("/")
-    public String index(Model model){
-        return "teacherInfo";
+    public String index() {
+        return "index";
     }
 
     @GetMapping("/teacherInfo")
-    public String teacher(Model model){
+    public String teacher() {
         return "teacherInfo";
     }
 
+    @GetMapping("/studentInfo")
+    public String studentInfo() {
+        return "studentInfo";
+    }
+
     @GetMapping("/student")
-    public String student(Model model){
+    public String student() {
         return "student";
     }
 
     @GetMapping("/questionSingleChoice")
-    public String questionSingleChoice(Model model){
+    public String questionSingleChoice() {
         return "questionSingleChoice";
     }
 

@@ -86,6 +86,12 @@ function resort(element) {
     });
 }
 
+
+function initSelect(element){
+    element.empty();
+    element.append($("<option>", {value: ""}).text("-"));
+}
+
 var _LEVEL_MAP = {
     "1": "小学一年级",
     "2": "小学二年级",

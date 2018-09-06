@@ -1,18 +1,20 @@
 $(function () {
 
 
-    var onSearchTeacherInfo = function () {
+    /**
+     * 学生信息查询
+     */
+    function onSearchStudentInfo() {
         var query = {
-            level: $('#teacherLevel').val(),
-            subject: $('#search_subject').val(),
-            workNumber: $('#work_number').val()
+            classId: $('#search_classId').val(),
+            studentNumber: $('#student_number').val()
         };
         var Apply = Backbone.Model.extend({});
 
         /** @namespace Backbone.PageableCollection */
         var PageableTerritories = Backbone.PageableCollection.extend({
             model: Apply,
-            url: "/teacher/search",
+            url: "/student/search",
             state: {
                 pageSize: 10
             },
@@ -73,27 +75,35 @@ $(function () {
         // button绑定的点击方法
         function onDetailButtonClick(model, name) {
             if (name === "detail") {
-                $('.modal-title').text("教职工信息");
+                $('.modal-title').text("学员信息");
                 $('#modalExt').modal('show');
                 initBaseJson(model.attributes.id);
             } else if (name === "update") {
                 state = 1;
-                $('#updateModalTitle').text("更新教职工信息");
-                $("#teacherInfoForm")[0].reset();
+                $('#updateModalTitle').text("更新学员信息");
+                $("#infoForm")[0].reset();
                 var $updateModal = $('#updateModal');
                 $updateModal.data('id', model.attributes.id);
-                $updateModal.find("#workNumber").val(model.attributes.workNumber);
+                $updateModal.find("#studentNumber").val(model.attributes.studentNumber);
                 $updateModal.find("#password").val(model.attributes.password);
-                $updateModal.find("#level").val(model.attributes.level).trigger('change');
-                $updateModal.find("#subject").val(model.attributes.subject).trigger('change');
+                if (clazz) {
+                    $.each(clazz, function () {
+                        if (this.id === parseInt(model.attributes.classId)) {
+                            $updateModal.find("select[name='year']").val(this.year).trigger('change');
+                            $updateModal.find("#classId").val(model.attributes.classId).trigger('change');
+                        }
+                    })
+                }
                 $updateModal.find("#name").val(model.attributes.name);
                 $updateModal.find("#identityNumber").val(model.attributes.identityNumber);
-                $updateModal.find("#homePhone").val(model.attributes.homePhone);
-                $updateModal.find("#telephone").val(model.attributes.telephone);
+                $updateModal.find("#contactNumber").val(model.attributes.contactNumber);
                 $updateModal.find("#homeAddress").val(model.attributes.homeAddress);
                 $updateModal.find("#contactName").val(model.attributes.contactName);
                 $updateModal.find("#contactTelephone").val(model.attributes.contactTelephone);
                 $updateModal.find("#contactRelationship").val(model.attributes.contactRelationship);
+                $updateModal.find("#standbyContactName").val(model.attributes.standbyContactName);
+                $updateModal.find("#standbyContactTelephone").val(model.attributes.standbyContactTelephone);
+                $updateModal.find("#standbyContactRelationship").val(model.attributes.standbyContactRelationship);
                 $updateModal.find('#voided').attr('checked', !model.attributes.voided);
                 $updateModal.modal('show');
             } else {
@@ -103,7 +113,7 @@ $(function () {
 
         // 查询申请用户基本信息
         function initBaseJson(id) {
-            $.get('/teacher/searchById', {
+            $.get('/student/searchById', {
                 id: id
             }, function (data, status) {
                 if (status === "success") {
@@ -119,8 +129,8 @@ $(function () {
         function createBackslid(collection) {
             var columns = [{
                 editable: false,
-                name: "workNumber",
-                label: "工号",
+                name: "studentNumber",
+                label: "学号",
                 cell: "string"
             }, {
                 editable: false,
@@ -129,12 +139,18 @@ $(function () {
                 cell: "string"
             }, {
                 editable: false,
-                name: "subject",
-                label: "科目",
+                name: "classId",
+                label: "班级",
                 cell: "string",
                 formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
                     fromRaw: function (rawValue, model) {
-                        return _SUBJECT_MAP[rawValue];
+                        if (clazz) {
+                            $.each(clazz, function () {
+                                if (this.id === rawValue) {
+                                    return this.classDesc;
+                                }
+                            })
+                        }
                     }
                 })
             }, {
@@ -144,14 +160,19 @@ $(function () {
                 cell: "string"
             }, {
                 editable: false,
-                name: "telephone",
-                label: "手机号码",
-                cell: "string"
-            }, {
-                editable: false,
                 name: "homeAddress",
                 label: "住址",
                 cell: "string"
+            }, {
+                editable: false,
+                name: "voided",
+                label: "是否在读",
+                cell: "boolean",
+                formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
+                    fromRaw: function (rawValue, model) {
+                        return !rawValue;
+                    }
+                })
             }, {
                 editable: false,
                 cell: "button",
@@ -212,19 +233,22 @@ $(function () {
 
         createBackslid(pageableTerritories);
         pageableTerritories.fetch();
-    };
+    }
 
     var state = 0;
 
     /**
-     * 初始化添加教师信息表单
+     * 初始化添加学员信息表单
      */
-    function initTeacherForm() {
+    function initStudentForm() {
         state = 0;
         var $updateModal = $('#updateModal');
-        $('#updateModalTitle').text("添加教师");
-        $("#teacherInfoForm")[0].reset();
-        $("#workNumber").removeAttr("readonly");
+        $('#updateModalTitle').text("添加学员");
+        $("#infoForm")[0].reset();
+        var $studentNumber = $("#studentNumber");
+        $studentNumber.parent().parent().hide();
+        $studentNumber.removeAttr("required");
+        $("#name").removeAttr("readonly");
         $("#password").removeAttr("readonly");
         var $level = $('#level');
         $level.select2($level.data());
@@ -234,15 +258,15 @@ $(function () {
     }
 
     /**
-     * 保存教师信息
+     * 保存学生信息
      */
-    function onSaveTeacherInfo() {
-        var $teacherInfoForm = $("#teacherInfoForm");
-        if (!$teacherInfoForm.parsley().validate()) {
+    function onSaveStudentInfo() {
+        var $infoForm = $("#infoForm");
+        if (!$infoForm.parsley().validate()) {
             return false;
         }
         var data = {};
-        var dataArray = $teacherInfoForm.serializeArray();
+        var dataArray = $infoForm.serializeArray();
         $.each(dataArray, function (i, field) {
             data[field.name] = field.value;
         });
@@ -251,7 +275,7 @@ $(function () {
             data["id"] = $("#updateModal").data('id');
         }
         $.ajax({
-            url: '/teacher/update',
+            url: '/student/update',
             type: 'PUT',
             data: JSON.stringify(data),
             contentType: 'application/json',
@@ -261,11 +285,11 @@ $(function () {
                 } else {
                     alert("更新成功！");
                 }
-                onSearchTeacherInfo();
+                onSearchStudentInfo();
                 $("#updateModal").modal('hide');
             },
             error: function (result) {
-                alert("系统异常");
+                alert(result.responseJSON.message);
 
             }
         });
@@ -274,38 +298,78 @@ $(function () {
     /**
      *  获取所有配置：级别/科目
      */
-    function initTeacherConfigInfo() {
-        var $level = $("select[name='level']");
-        initSelect($level);
-        $level.append($("<option>", {value: "1"}).text("1"));
-        $level.append($("<option>", {value: "2"}).text("2"));
-        $level.select2($level.data());
-        var $subject = $("select[name='subject']");
-        initSelect($subject);
-        $subject.append($("<option>", {value: "MATH"}).text("数学"));
-        $subject.append($("<option>", {value: "CHINESE"}).text("语文"));
-        $subject.append($("<option>", {value: "ENGLISH"}).text("英语"));
-        $subject.select2($subject.data());
+    function initConfigInfo() {
+        var $year = $("select[name='year']");
+        initSelect($year);
+        var year = new Date().getFullYear();
+        for (var i = 0; i < 10; i++) {
+            $year.append($("<option>", {value: year}).text(year));
+            year--;
+        }
+        $year.select2($year.data());
+        var $classId = $("select[name='classId']");
+        initSelect($classId);
+        $classId.select2($classId.data());
+        $.get('/class/findAll', {}, function (data, status) {
+            if (status === "success") {
+                clazz = data;
+            } else {
+                alert(data.message);
+                return false;
+            }
+        });
+    }
+
+    var clazz;
+    function changeYear(year) {
+        var $classId = $("select[name='classId']");
+        initSelect($classId);
+        if (clazz) {
+            $.each(clazz, function () {
+                if (this.year === year) {
+                    $classId.append($("<option>", {value: this.id}).text(this.classDesc));
+                }
+            })
+        }
+        $classId.select2($classId.data());
+        // $.get('/class/findByYear', {
+        //     year: year
+        // }, function (data, status) {
+        //     if (status === "success") {
+        //         clazz = data;
+        //         var $classId = $("select[name='classId']");
+        //         initSelect($classId);
+        //         $.each(data,function (index, value) {
+        //             $classId.append($("<option>", {value: this.id}).text(this.classDesc));
+        //         });
+        //         $classId.select2($classId.data());
+        //     }else{
+        //         alert("系统异常");
+        //         return false;
+        //     }
+        // });
     }
 
     /**
      * 页面加载
      */
     function pageLoad() {
-        var $isVoided = $('#isVoided');
-        $isVoided.select2($isVoided.data());
-
-        initTeacherConfigInfo();
+        initConfigInfo();
+        // 绑定change点击事件
+        var $year = $("select[name='year']");
+        $year.on('change', function () {
+            changeYear(this.value);
+        });
 
         // 绑定button点击事件
         $('#insertButton').on('click', function () {
-            initTeacherForm();
+            initStudentForm();
         });
         $('#commitButton').on('click', function () {
-            onSaveTeacherInfo();
+            onSaveStudentInfo();
         });
         $('#searchButton').on('click', function () {
-            onSearchTeacherInfo();
+            onSearchStudentInfo();
         });
 
 

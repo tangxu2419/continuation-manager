@@ -1,6 +1,7 @@
 package com.continuation.manager.domain.po.mysql;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,6 +15,7 @@ import java.util.Date;
  * @author tangxu
  * @date 2018/8/1315:43
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @Table(name = "t_class_info")
@@ -28,16 +30,22 @@ public class ClassPO extends BaseEntity {
     private String headmasterId;
 
     /**
-     * 班主任-Id
+     * 学年
      */
     @Column(length = 10)
-    private String schoolYear;
+    private String year;
 
     /**
      * 年级
      */
     @Column(length = 10)
     private String grade;
+
+    /**
+     * 班级
+     */
+    @Column(length = 32)
+    private String classDesc;
 
     /**
      * 班级类型

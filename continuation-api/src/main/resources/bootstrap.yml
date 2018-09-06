@@ -1,4 +1,4 @@
-server.port: 11100
+server.port: 21100
 
 spring:
   application:
