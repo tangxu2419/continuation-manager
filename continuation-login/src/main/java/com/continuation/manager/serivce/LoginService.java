@@ -46,13 +46,13 @@ public class LoginService {
     /**
      * 初始化登陆图片验证码
      *
-     * @param dto 请求对象
+     * @param username 登陆用户名
      * @return 响应对象
      */
-    public BaseResponseDTO initVerificationCode(LoginRequestDTO dto) throws InitVerifyCodeException {
-        Assert.hasText(dto.getUsername(), "用户名不能为空");
-        VerifyCode randomCode = VerifyCodeUtil.getRandomCode();
-        redisService.set(VERIFY_HEADER.concat(dto.getUsername()), randomCode, properties.getVerCodeLiveTime().toSeconds());
+    public BaseResponseDTO initVerificationCode(String username) throws InitVerifyCodeException {
+        Assert.hasText(username, "用户名不能为空");
+        VerifyCode randomCode = VerifyCodeUtil.getRandomCode(100, 30);
+        redisService.set(VERIFY_HEADER.concat(username), randomCode, properties.getVerCodeLiveTime().toSeconds());
 //        randomCode.setCode(null);
         return new BaseResponseDTO(ReasonCodeConstants.RETURN_CODE_SUCCESS, "调用成功", randomCode);
     }

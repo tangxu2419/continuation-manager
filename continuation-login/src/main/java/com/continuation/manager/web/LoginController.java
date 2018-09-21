@@ -2,8 +2,6 @@ package com.continuation.manager.web;
 
 import com.continuation.manager.domain.dto.BaseResponseDTO;
 import com.continuation.manager.domain.dto.LoginRequestDTO;
-import com.continuation.manager.exception.InitVerifyCodeException;
-import com.continuation.manager.exception.RequestParamException;
 import com.continuation.manager.serivce.LoginService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,19 +21,19 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping("/init")
-    public ResponseEntity<?> initVerificationCode(@RequestBody LoginRequestDTO dto) throws Exception {
-        log.info("收到用户登录初始化请求：{}",dto.getUsername());
-        BaseResponseDTO responseDTO = loginService.initVerificationCode(dto);
+    public ResponseEntity<?> initVerificationCode(@RequestParam String username) throws Exception {
+        log.info("收到用户登录初始化请求：{}", username);
+        BaseResponseDTO responseDTO = loginService.initVerificationCode(username);
         return ResponseEntity.ok(responseDTO);
     }
 
     @PostMapping("/")
     public ResponseEntity<?> login(
-            @RequestHeader(value = "login_token")String loginToken,
+            @RequestHeader(value = "login_token") String loginToken,
             @RequestBody LoginRequestDTO dto
     ) throws Exception {
-        log.info("收到用户登录请求：{}",dto.toString());
-        BaseResponseDTO responseDTO = loginService.login(dto,loginToken);
+        log.info("收到用户登录请求：{}", dto.toString());
+        BaseResponseDTO responseDTO = loginService.login(dto, loginToken);
         return ResponseEntity.ok(responseDTO);
     }
 

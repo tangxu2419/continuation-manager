@@ -39,6 +39,5 @@ server:
       enabled: true
 
 continuation:
-  login-live-time: PT30M
-  questionLiveTime: P1D
-  singleChoiceTestNumber: 15
+  login-url: http://127.0.0.1:11000/continuation/login/
+  login-init-url: http://127.0.0.1:11000/continuation/login/init

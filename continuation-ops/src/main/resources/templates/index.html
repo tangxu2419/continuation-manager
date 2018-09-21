@@ -7,7 +7,6 @@
     <!-- common libraries. required for every page-->
     <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/jquery/dist/jquery.min.js}"></script>
     <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/lib/bootstrap-sass/assets/javascripts/bootstrap.min.js}"></script>
-    <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/js/app.js}"></script>
     <script th:src="@{/imports/wrapbootstrap-3.7.0-dist/js/settings.js}"></script>
     <script th:src="@{/js/common.js}"></script>
     <!-- page specific libs -->
@@ -18,13 +17,30 @@
     <link rel="stylesheet" th:href="@{/imports/wrapbootstrap-3.7.0-dist/css/application.css}"/>
     <link rel="stylesheet" th:href="@{css/common.css}"/>
     <script type="application/javascript" th:src="@{/js/index.js}"></script>
-<style>
-    .form{background: rgba(255,255,255,0.2);width:400px;margin:120px auto;}
-    /*阴影*/
-    .fa{display: inline-block;top: 27px;left: 6px;position: relative;color: #ccc;}
-    input[type="text"],input[type="password"]{padding-left:26px;}
-    .checkbox{padding-left:21px;}
-</style>
+    <style>
+        .form {
+            background: rgba(255, 255, 255, 0.2);
+            width: 400px;
+            margin: 120px auto;
+        }
+
+        /*阴影*/
+        .fa {
+            display: inline-block;
+            top: 27px;
+            left: 6px;
+            position: relative;
+            color: #ccc;
+        }
+
+        input[type="text"], input[type="password"] {
+            padding-left: 26px;
+        }
+
+        .checkbox {
+            padding-left: 21px;
+        }
+    </style>
 </head>
 
 <body>
@@ -36,22 +52,25 @@
                 <div class="col-md-9">
                     <div class="form-group">
                         <i class="fa fa-user fa-lg"></i>
-                        <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus="autofocus" maxlength="20"/>
+                        <input class="form-control required" type="text" placeholder="Username" id="username"
+                               name="username" autofocus="autofocus" maxlength="20"/>
                     </div>
                     <div class="form-group">
                         <i class="fa fa-lock fa-lg"></i>
-                        <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="8"/>
+                        <input class="form-control required" type="password" placeholder="Password" id="password"
+                               name="password" maxlength="8"/>
                     </div>
-                    <div class="form-group hidden" name="verify">
+                    <div class="form-group" name="verify" style="display: none;">
                         <i class="fa fa-flip-vertical fa-lg"></i>
-                        <input class="form-control required" type="password" placeholder="VerCode" id="verCode" name="verCode" maxlength="8"/>
+                        <input class="form-control required text-right" type="password" placeholder="VerCode" id="verCode"
+                               name="verCode" maxlength="8"/>
+                        <img class="text-right" id="kaptchaImage" style="cursor:pointer" src="">
                     </div>
-                    <div class="form-group hidden"name="verify">
-                        <img  id="kaptchaImage" style="cursor:pointer">
+                    <div class="form-group" name="verify" style="display: none;">
                     </div>
                     <div class="form-group">
                         <label class="checkbox">
-                            <input type="checkbox" name="remember" value="1"/>记住我
+                            <input class="form-control" type="checkbox" name="remember" value="1"/>记住我
                         </label>
                     </div>
                     <div class="form-group col-md-offset-9">
